@@ -1,0 +1,20 @@
+import Route from '@ioc:Adonis/Core/Route'
+Route.group(()=>{
+Route.get('/read','CustomersController.read')
+Route.post('/insert','CustomersController.insert')
+Route.put('/update/:id','CustomersController.update')
+Route.delete('/delete/:id','CustomersController.delete')
+Route.post('/search','CustomersController.search')
+Route.post('/sortasc','CustomersController.sortasc')
+Route.post('/sortdesc','CustomersController.sortdesc')
+}).prefix('/customers')
+Route.group(()=>{
+Route.get('/read','HotelsController.read')
+Route.post('/insert','HotelsController.insert')
+Route.put('/update/:id','HotelsController.update')
+Route.delete('/delete/:id','HotelsController.delete')
+Route.post('/search','HotelsController.search')
+Route.post('/sortasc','HotelsController.sortasc')
+Route.post('/sortdesc','HotelsController.sortdesc')
+Route.post('/address/:id','HotelsController.address')
+}).prefix('/hotels')
