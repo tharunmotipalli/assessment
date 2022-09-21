@@ -21,6 +21,8 @@
                {{icon}}
               </v-icon>
             </th>
+            <th class="text-left"> Customer Name
+          </th>
             <th class="text-left">Edit</th>
             <th class="text-left">Delete</th>
           </tr>
@@ -32,9 +34,10 @@
             
             <td>{{ item.customerid}}
             </td>
-            <td>{{`${item.doorno} ${item.street} ,${item.landmark}, ${item.city} -${item.pincode}`}}
+            <td>{{JSON.stringify(`${item.doorno},${item.street},${item.landmark},${item.city}-${item.pincode}`)}}
             </td>
             <td>{{ item.pincode }}</td>
+            <td>{{ item.customername }}</td>
             <td>
                 <v-icon  color="red" @click="editItem(item)" small class="mr-2">
                   mdi-pencil
@@ -135,7 +138,8 @@ import API from "../services/api"
         searchInput: '',
         option:'',
         icon:'mdi-arrow-up',
-  address:{}
+  address:[],
+  add:''
       }
     },
     mounted() {
@@ -159,8 +163,14 @@ import API from "../services/api"
   
         )
           .then((response)=> {
-            this.address=response.data
-            console.log(response);
+            this.address=response.data.address
+           console.log(this.address)
+           this.list.map(item=>({
+            address:item.address
+           }))
+             
+            
+         
   
           })
           .catch(function (error) {
@@ -239,8 +249,7 @@ import API from "../services/api"
       this.icon='mdi-arrow-down'
     }
   },
- 
-  }
+ }
   }
   
   </script>

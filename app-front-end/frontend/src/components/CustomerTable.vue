@@ -13,6 +13,8 @@
                  {{icon}}
               </v-icon>
             </th>
+            <th class="text-left">No of Hotels
+         </th>
             
             <th class="text-left">Edit</th>
             <th class="text-left">Delete</th>
@@ -24,6 +26,7 @@
              <td>{{ item.customerid }}</td>
              <td>{{ item.customername}}
             </td>
+            <td>{{ item.count}}</td>
            
                 <td>
                     <v-icon  color="red" @click="editItem(item)" small class="mr-2">

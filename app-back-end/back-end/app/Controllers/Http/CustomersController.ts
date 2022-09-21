@@ -5,9 +5,12 @@ import Customer from '../../Models/Customer';
 
 
 export default class CustomersController {
- public read(){
-    return Database.from('customers').select('*').orderBy('customerid')
-
+ public async read(){
+   return await Customer.query().from('customers')
+  .leftJoin('hotels', 'hotels.customerid', '=', 'customers.customerid')
+  .select('customers.*')
+  .groupBy('customers.id')
+  .count('hotels.customerid as count')
   }
   public async insert({request}:HttpContextContract){
     const customer=new Customer()
@@ -24,6 +27,7 @@ export default class CustomersController {
   public async update({ request }) {
     console.log(request.params().id)
     const edititem = await Customer.findByOrFail('id', request.params().id)
+    edititem.customerid=request.input('customerid')
     edititem.customername = request.input('customername')
     await edititem.save()
     return edititem
@@ -44,17 +48,24 @@ export default class CustomersController {
     }
     public async sortasc({ request }: HttpContextContract) {
         const sortItem = request.input('sortItem')
-    
-        const sort = await Database.from('customers').select('*').orderBy(`${sortItem}`, `asc`)
+        const sort = await Database.from('customers')
+        .leftJoin('hotels', 'hotels.customerid', '=', 'customers.customerid')
+        .select('customers.*')
+        .count('hotels.customerid as count')
+        .groupBy('customers.id')
+        .orderBy(`customers.${sortItem}`, `asc`)
+       
         return sort
       } public async sortdesc({ request }: HttpContextContract) {
         const sortItem = request.input('sortItem')
-    
-        const sort = await Database.from('customers').select('*').orderBy(`${sortItem}`, `desc`)
+        const sort = await Database.from('customers')
+        .leftJoin('hotels', 'hotels.customerid', '=', 'customers.customerid')
+        .select('customers.*')
+        .count('hotels.customerid as count')
+        .groupBy('customers.id')
+        .orderBy(`customers.${sortItem}`, `desc`)
         return sort
       }
-
-
-
+     
 
 }

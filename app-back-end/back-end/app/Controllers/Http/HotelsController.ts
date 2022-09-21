@@ -1,14 +1,19 @@
- import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+
+import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 import Database from "@ioc:Adonis/Lucid/Database"
 import Hotel from "App/Models/Hotel"
 
 export default class HotelsController {
-    public read(){
-        return Database.from('hotels').select('*').orderBy('id')
-    
+    public async read(){
+    const read=await Database
+      .from('hotels')
+      .join('customers', 'hotels.customerid', '=', 'customers.customerid')
+      .select('hotels.*')
+      .select('customers.customername')
+      return read
       }
-      public async insert({request}:HttpContextContract){
+      public async insert({request,response}:HttpContextContract){
         const hotel=new Hotel()
         hotel.hotelname=request.input('hotelname')
         hotel.customerid=request.input('customerid')
@@ -17,10 +22,9 @@ export default class HotelsController {
         hotel.landmark=request.input('landmark')
         hotel.city=request.input('city')
         hotel.pincode=request.input('pincode')
+        let address=`${hotel.doorno} ${hotel.street} ${hotel.landmark} ${hotel.city} ${hotel.pincode}`
         await hotel.save()
-        const address=await Database.from('hotels').select('doorno','street','city','landmark','pincode').as('address')
-        console.log(address)
-        return address
+       return response.json({address})
       }
       public async delete({ request }) {
         const deleteItem = await Hotel.findByOrFail('id', request.params().id)
@@ -67,6 +71,8 @@ export default class HotelsController {
             const sort = await Database.from('hotels').select('*').orderBy(`${sortItem}`, `desc`)
             return sort
           }
+          
+    
          
 
 

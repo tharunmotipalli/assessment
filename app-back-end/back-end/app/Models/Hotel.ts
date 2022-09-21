@@ -18,4 +18,5 @@ export default class Hotel extends BaseModel {
   public city: string
   @column()
   public pincode: number
+  static $extras: any
 }
