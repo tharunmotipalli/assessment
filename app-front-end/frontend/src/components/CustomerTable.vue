@@ -194,28 +194,20 @@ import API from "../services/api"
         this.list=searchpromise.data
       }
     },
-      
-      sortasc(value){
-        API.post(`http://127.0.0.1:3333/customers/sortasc`,{sortItem:value})
-        .then((res) => {
-              this.list = res.data
-        })
-        
-      },
-      sortdesc(value){
-        API.post(`http://127.0.0.1:3333/customers/sortdesc`,{sortItem:value})
-        .then((res) => {
-              this.list = res.data
-        })
-  },
-  sort(value)
+ async sort(value)
   {
     if(this.icon=='mdi-arrow-down'){
       this.icon='mdi-arrow-up'
-      this.sortasc(value)
+    await  API.post(`http://127.0.0.1:3333/customers/sort`,{sortItem:value,order:'asc'})
+        .then((res) => {
+              this.list = res.data
+        })
       
     }else if(this.icon=='mdi-arrow-up'){
-      this.sortdesc(value)
+      await  API.post(`http://127.0.0.1:3333/customers/sort`,{sortItem:value,order:'desc'})
+        .then((res) => {
+              this.list = res.data
+        })
       this.icon='mdi-arrow-down'
     }
   },

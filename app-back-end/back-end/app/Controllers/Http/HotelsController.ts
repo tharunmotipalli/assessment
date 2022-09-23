@@ -79,34 +79,15 @@ export default class HotelsController {
       console.log(data)
     return data
   }
-  public async sortasc({ request }: HttpContextContract) {
+  public async sort({ request }: HttpContextContract) {
     const sortItem = request.input('sortItem')
+    const order=request.input('order')
     let data = await Hotel.query()
       .select('*')
       .select('hotels.id')
       .select(Database.raw(`json_build_object('doorno', doorno,'street',street,'landmark',landmark,'city',city,'pincode',pincode) as address`))
       .join('customers', 'hotels.customerid', '=', 'customers.customerid')
-      .orderBy(`${sortItem}`, `asc`)
-      .then(data => data.map(el => {
-        const data = el.toJSON()
-        return {
-          ...data,
-          customername: el.$extras.customername,
-          address: el.$extras.address
-        }
-
-
-      }))
-    return data
-  }
-  public async sortdesc({ request }: HttpContextContract) {
-    const sortItem = request.input('sortItem')
-    let data = await Hotel.query()
-      .select('*')
-      .select('hotels.id')
-      .select(Database.raw(`json_build_object('doorno', doorno,'street',street,'landmark',landmark,'city',city,'pincode',pincode) as address`))
-      .join('customers', 'hotels.customerid', '=', 'customers.customerid')
-      .orderBy(`${sortItem}`, `desc`)
+      .orderBy(`${sortItem}`, order)
       .then(data => data.map(el => {
         const data = el.toJSON()
         return {

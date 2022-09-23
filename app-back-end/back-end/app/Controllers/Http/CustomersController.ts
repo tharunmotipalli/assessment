@@ -51,27 +51,17 @@ export default class CustomersController {
     const newSearch = search.map((el) => Object.assign({}, el.$attributes, { count: el.$extras.count }))
     return newSearch
   }
-  public async sortasc({ request }: HttpContextContract) {
+  public async sort({ request }: HttpContextContract) {
     const sortItem = request.input('sortItem')
+    const order=request.input('order')
     const read = await Customer.query()
       .leftJoin('hotels', 'hotels.customerid', '=', 'customers.customerid')
       .select('customers.*')
       .select('customers.id')
       .groupBy('customers.id')
-      .count('hotels.customerid as count').orderBy(`customers.${sortItem}`, `asc`)
-    const newRead = read.map((el) => Object.assign({}, el.$attributes, { count: el.$extras.count }))
-    return newRead
-  } public async sortdesc({ request }: HttpContextContract) {
-    const sortItem = request.input('sortItem')
-    const read = await Customer.query()
-      .leftJoin('hotels', 'hotels.customerid', '=', 'customers.customerid')
-      .select('customers.*')
-      .select('customers.id')
-      .groupBy('customers.id')
-      .count('hotels.customerid as count').orderBy(`customers.${sortItem}`, `desc`)
+      .count('hotels.customerid as count').orderBy(`customers.${sortItem}`, order)
     const newRead = read.map((el) => Object.assign({}, el.$attributes, { count: el.$extras.count }))
     return newRead
   }
-
 
 }
