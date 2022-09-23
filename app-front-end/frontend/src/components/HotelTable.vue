@@ -214,9 +214,12 @@ export default {
 
     async changedInput(input) { //search
       console.log(input)
+      if( !/^\s*\S+.*/.test(input)){
+          this.getdata()
+      }else{
       let searchpromise = await API.post('http://127.0.0.1:3333/hotels/search', { value: input })
       this.list = searchpromise.data
-     
+      }
 
     },
    async sort(value) {

@@ -3,12 +3,12 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 import Database from "@ioc:Adonis/Lucid/Database"
 import Hotel from "App/Models/Hotel"
+import HotelValidator from '../../Validators/HotelValidator';
 
 export default class HotelsController {
   public async read() {
     let data = await Hotel.query()
-      .select('*')
-      .select('hotels.id')
+      .select('*') .select('hotels.id')
       .select(Database.raw(`json_build_object('doorno', doorno,'street',street,'landmark',landmark,'city',city,'pincode',pincode) as address`))
       .join('customers', 'hotels.customerid', '=', 'customers.customerid')
       .then(data => data.map(el => {
@@ -22,14 +22,15 @@ export default class HotelsController {
     return data
   }
   public async insert({ request }: HttpContextContract) {
+    const payload=await request.validate(HotelValidator)
     const hotel = new Hotel()
-    hotel.hotelname = request.input('hotelname')
-    hotel.customerid = request.input('customerid')
-    hotel.doorno = request.input('doorno')
-    hotel.street = request.input('street')
-    hotel.landmark = request.input('landmark')
-    hotel.city = request.input('city')
-    hotel.pincode = request.input('pincode')
+    hotel.hotelname = payload['hotelname']
+    hotel.customerid = payload['customerid']
+    hotel.doorno = payload['doorno']
+    hotel.street = payload['street']
+    hotel.landmark = payload['landmark']
+    hotel.city = payload['city']
+    hotel.pincode = payload['pincode']
     await hotel.save()
     return hotel
   }
@@ -39,14 +40,15 @@ export default class HotelsController {
     await deleteItem.save()
   }
   public async update({ request }) {
+    const payload=await request.validate(HotelValidator)
     const edititem = await Hotel.findByOrFail('id', request.params().id)
-    edititem.hotelname = request.input('hotelname')
-    edititem.customerid = request.input('customerid')
-    edititem.doorno = request.input('doorno')
-    edititem.street = request.input('street')
-    edititem.landmark = request.input('landmark')
-    edititem.city = request.input('city')
-    edititem.pincode = request.input('pincode')
+    edititem.hotelname = payload['hotelname']
+    edititem.customerid = payload['customerid']
+    edititem.doorno = payload['doorno']
+    edititem.street = payload['street']
+    edititem.landmark = payload['landmark']
+    edititem.city = payload['city']
+    edititem.pincode = payload['pincode']
     await edititem.save()
     return
   }

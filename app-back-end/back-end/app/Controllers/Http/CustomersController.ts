@@ -1,6 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 import Customer from '../../Models/Customer';
+import CustomerValidator from '../../Validators/CustomerValidator';
 
 
 export default class CustomersController {
@@ -14,6 +15,7 @@ export default class CustomersController {
     return newRead
   }
   public async insert({ request }: HttpContextContract) {
+    const payload=await request.validate(CustomerValidator)
     const customer = new Customer()
     customer.customerid =request.input('customerid')
     customer.customername =request.input('customername')
@@ -26,9 +28,10 @@ export default class CustomersController {
     await deleteItem.save()
   }
   public async update({ request }) {
+    const payload=await request.validate(CustomerValidator)
     const edititem = await Customer.findByOrFail('id', request.params().id)
-    edititem.customerid =request.input('customerid')
-    edititem.customername =request.input('customername')
+    edititem.customerid =payload['customerid']
+    edititem.customername =payload['customername']
     await edititem.save()
     return edititem
   }

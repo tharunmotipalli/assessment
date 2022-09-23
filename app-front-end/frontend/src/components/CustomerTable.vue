@@ -187,7 +187,7 @@ import API from "../services/api"
      
     async changedInput(input){
       console.log(input)
-      if(input==''){
+      if( !/^\s*\S+.*/.test(input)){
           this.getdata()
       }else{
          let searchpromise=await API.post('http://127.0.0.1:3333/customers/search',{value:input})
