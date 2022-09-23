@@ -100,7 +100,7 @@ import API from "../services/api"
         tempObj: {},
         editedIndex: -1,
         formData: {
-          id: '',
+         id: '',
          customername:'',
          customerid:''
         },
@@ -117,15 +117,16 @@ import API from "../services/api"
     },
     mounted() {
       this.getdata()
+     
     },
     methods:
     {
       async getdata() {
         await API.get(`http://127.0.0.1:3333/customers/read`)
           .then((response) => {
-            console.warn(response)
+            console.warn(response.data)
             this.list = (response.data)
-            console.warn(response.data.data)
+            
           })
       },
       async insert() {
@@ -164,6 +165,7 @@ import API from "../services/api"
         this.rand = false
         this.editedIndex = this.list.indexOf(item)
         this.formData = Object.assign({}, item)
+        console.log(this.formData)
         this.dialog = true
         this.saveButton = false
   
@@ -185,10 +187,13 @@ import API from "../services/api"
      
     async changedInput(input){
       console.log(input)
+      if(input==''){
+          this.getdata()
+      }else{
          let searchpromise=await API.post('http://127.0.0.1:3333/customers/search',{value:input})
         this.list=searchpromise.data
-  
-      },
+      }
+    },
       
       sortasc(value){
         API.post(`http://127.0.0.1:3333/customers/sortasc`,{sortItem:value})
