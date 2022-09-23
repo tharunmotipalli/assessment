@@ -17,8 +17,8 @@ export default class CustomersController {
   public async insert({ request }: HttpContextContract) {
     const payload=await request.validate(CustomerValidator)
     const customer = new Customer()
-    customer.customerid =request.input('customerid')
-    customer.customername =request.input('customername')
+    customer.customerid =payload['customerid']
+    customer.customername =payload['customername']
     await customer.save()
     return Customer.all()
   }
