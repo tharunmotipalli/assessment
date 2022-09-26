@@ -64,7 +64,7 @@ export default class HotelsController {
           query.where('hotels.customerid', searchitem).orWhere('pincode',searchitem)
         }
       })
-      .orWhere((query: any) => {
+      .orWhere((query) => {
         query
           .where("hotelname", "ilike", `%${searchitem}%`)
           .orWhere("customers.customername","ilike", `%${searchitem}%`)
