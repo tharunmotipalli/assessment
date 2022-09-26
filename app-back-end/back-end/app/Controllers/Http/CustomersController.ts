@@ -39,7 +39,7 @@ export default class CustomersController {
         query.where('customerid', searchitem)
       }
     })
-      .orWhere((query: any) => {
+      .orWhere((query) => {
         query
           .where("customername", "ilike", `%${searchitem}%`)
       })  
