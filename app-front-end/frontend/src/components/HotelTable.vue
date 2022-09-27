@@ -138,17 +138,11 @@ export default {
       icon: 'mdi-arrow-up',
       values:{city:'chennai',street:'bazar'},
       address: [],
-      appKey: { headers: { appKey: '5FjmUFFmpYjt0Keb6MLaFPgaU1-Y3sL3' } },
+      appKey: { headers: { appKey: process.env.VUE_APP_KEY} },
+      hotelsUrl:process.env.VUE_APP_HOTELS_URL
     }
   },
-  watch: {
-    city:{
-      deep: true,
-      handler(){
-      console.log(`city value changed inside of array `)
-      }
-    }
-  },
+
   mounted() {
     this.getdata()
 
@@ -156,7 +150,7 @@ export default {
   methods:
   {
     async getdata() {
-      await API.get(`http://127.0.0.1:3333/hotels/read`, this.appKey)
+      await API.get(`${this.hotelsUrl}/read`, this.appKey)
         .then((response) => {
           console.warn(response)
           this.list = response.data
@@ -166,7 +160,7 @@ export default {
     async insert() {
 
       this.$refs.form.validate()
-      await API.post(`http://127.0.0.1:3333/hotels/insert`, this.formData, this.appKey
+      await API.post(`${this.hotelsUrl}/insert`, this.formData, this.appKey
       )
       this.$refs.form.reset()
       this.getdata()
@@ -181,7 +175,7 @@ export default {
     },
     async deleteItem(item) {
       this.formData = Object.assign({}, item)
-      await API.delete(`http://127.0.0.1:3333/hotels/delete/${this.formData.id}`, this.appKey)
+      await API.delete(`${this.hotelsUrl}/delete/${this.formData.id}`, this.appKey)
         .then(response => {
           console.log(response);
         });
@@ -198,7 +192,7 @@ export default {
 
 
     async edit() {
-      await API.put(`http://127.0.0.1:3333/hotels/update/${this.formData.id}`, this.formData, this.appKey)
+      await API.put(`${this.hotelsUrl}/update/${this.formData.id}`, this.formData, this.appKey)
         .then(response => {
           console.log(response);
         });
@@ -213,7 +207,7 @@ export default {
       if (!/^\s*\S+.*/.test(input)) {
         this.getdata()
       } else {
-        let searchpromise = await API.post('http://127.0.0.1:3333/hotels/search', { value: input }, this.appKey)
+        let searchpromise = await API.post(`${this.hotelsUrl}/search`, { value: input }, this.appKey)
         this.list = searchpromise.data
       }
 
@@ -221,13 +215,13 @@ export default {
     async sort(value) {
       if (this.icon == 'mdi-arrow-down') {
         this.icon = 'mdi-arrow-up'
-        await API.post(`http://127.0.0.1:3333/hotels/sort`, { sortItem: value, order: 'asc' }, this.appKey)
+        await API.post(`${this.hotelsUrl}/sort`, { sortItem: value, order: 'asc' }, this.appKey)
           .then((res) => {
             this.list = res.data
           })
 
       } else if (this.icon == 'mdi-arrow-up') {
-        await API.post(`http://127.0.0.1:3333/hotels/sort`, { sortItem: value, order: 'desc' }, this.appKey)
+        await API.post(`${this.hotelsUrl}/sort`, { sortItem: value, order: 'desc' }, this.appKey)
           .then((res) => {
             this.list = res.data
           })

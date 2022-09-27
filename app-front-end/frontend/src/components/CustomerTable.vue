@@ -108,7 +108,8 @@ import API from "../services/api"
         rand: true,
         searchitem:'',
         icon:'mdi-arrow-up',
-        appKey:{headers:{appKey:'5FjmUFFmpYjt0Keb6MLaFPgaU1-Y3sL3'}},
+        appKey:{headers:{appKey:process.env.VUE_APP_KEY}},
+        customersUrl:process.env.VUE_APP_CUSTOMERS_URL
   
       }
     },
@@ -119,7 +120,7 @@ import API from "../services/api"
     methods:
     {
       async getdata() {
-        await API.get(`http://127.0.0.1:3333/customers/read`,this.appKey)
+        await API.get(`${this.customersUrl}/read`,this.appKey)
           .then((response) => {
             console.warn(response.data)
             this.list = (response.data)
@@ -129,7 +130,7 @@ import API from "../services/api"
       async insert() {
   
         this.$refs.form.validate()
-        await API.post(`http://127.0.0.1:3333/customers/insert`, this.formData,this.appKey
+        await API.post(`${this.customersUrl}/insert`, this.formData,this.appKey
   
         )
           .then((response)=> {
@@ -152,7 +153,7 @@ import API from "../services/api"
       },
       async deleteItem(item) {
         this.formData = Object.assign({}, item)
-        await API.delete(`http://127.0.0.1:3333/customers/delete/${this.formData.id}`,this.appKey)
+        await API.delete(`${this.customersUrl}/delete/${this.formData.id}`,this.appKey)
           .then(response => {
             console.log(response);
           });
@@ -169,7 +170,7 @@ import API from "../services/api"
   
   
       async edit() {
-        await API.put(`http://127.0.0.1:3333/customers/update/${this.formData.id}`,
+        await API.put(`${this.customersUrl}/update/${this.formData.id}`,
           this.formData,this.appKey
         )
           .then(response => {
@@ -186,7 +187,7 @@ import API from "../services/api"
       if( !/^\s*\S+.*/.test(input)){
           this.getdata()
       }else{
-         let searchpromise=await API.post('http://127.0.0.1:3333/customers/search',{value:input},this.appKey)
+         let searchpromise=await API.post(`${this.customersUrl}/search`,{value:input},this.appKey)
         this.list=searchpromise.data
       }
     },
@@ -194,13 +195,13 @@ import API from "../services/api"
   {
     if(this.icon=='mdi-arrow-down'){
       this.icon='mdi-arrow-up'
-    await  API.post(`http://127.0.0.1:3333/customers/sort`,{sortItem:value,order:'asc'},this.appKey)
+    await  API.post(`${this.customersUrl}/sort`,{sortItem:value,order:'asc'},this.appKey)
         .then((res) => {
               this.list = res.data
         })
       
     }else if(this.icon=='mdi-arrow-up'){
-      await  API.post(`http://127.0.0.1:3333/customers/sort`,{sortItem:value,order:'desc'},this.appKey)
+      await  API.post(`${this.customersUrl}/sort`,{sortItem:value,order:'desc'},this.appKey)
         .then((res) => {
               this.list = res.data
         })
