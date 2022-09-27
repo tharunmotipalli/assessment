@@ -36,7 +36,7 @@ export default class CustomersController {
     return edititem
   }
   public async search({ request }: HttpContextContract) {
-    var searchitem = request.input('value')
+    const searchitem = request.input('value')
     const search = await Customer.query()
       .leftJoin('hotels', 'hotels.customerid', '=', 'customers.customerid')
       .select('customers.*')
