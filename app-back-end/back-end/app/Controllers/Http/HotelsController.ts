@@ -53,8 +53,8 @@ export default class HotelsController {
     return
   }
   public async search({ request }: HttpContextContract) {
-    var searchitem = request.input('value')
-    let data = await Hotel.query()
+    const searchitem = request.input('value')
+    const data = await Hotel.query()
       .select('*')
       .select('hotels.id')
       .select(Database.raw(`json_build_object('doorno', doorno,'street',street,'landmark',landmark,'city',city,'pincode',pincode) as address`))
