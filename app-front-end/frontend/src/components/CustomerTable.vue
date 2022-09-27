@@ -97,7 +97,6 @@ import API from "../services/api"
       return {
         list: [],
         dialog: false,
-        tempObj: {},
         editedIndex: -1,
         formData: {
          id: '',
@@ -106,11 +105,8 @@ import API from "../services/api"
         },
         saveButton: true,
         editButton: false,
-        key: 0,
         rand: true,
-        searchitem: undefined,
-        searchInput:'',
-        option:'',
+        searchitem:'',
         icon:'mdi-arrow-up',
         appKey:{headers:{appKey:'5FjmUFFmpYjt0Keb6MLaFPgaU1-Y3sL3'}},
   
@@ -164,7 +160,6 @@ import API from "../services/api"
       },
       editItem(item) {
         this.rand = false
-        this.editedIndex = this.list.indexOf(item)
         this.formData = Object.assign({}, item)
         console.log(this.formData)
         this.dialog = true

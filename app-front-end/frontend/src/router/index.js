@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import CustomerTable from '../components/CustomerTable.vue'
-import HotelTable from '../components/HotelTable.vue'
+import CustomerView from '../views/CustomerView.vue'
+import HotelView from '../views/HotelView.vue'
 
 Vue.use(VueRouter)
 
@@ -9,12 +9,12 @@ const routes = [
   {
     path: '/customers',
     name: 'customers',
-    component:CustomerTable
+    component:CustomerView
   },
   {
     path: '/hotels',
     name: 'hotels',  
-    component:HotelTable
+    component:HotelView
   }
 ]
 
